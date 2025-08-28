@@ -9,7 +9,8 @@
     "build:demo": "tsc -b && vite build",
     "build": "pnpm build:lib && pnpm build:demo",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "version": "pnpx bumpp"
   },
   "dependencies": {},
   "peerDependencies": {
