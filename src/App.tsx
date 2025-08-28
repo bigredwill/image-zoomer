@@ -50,13 +50,11 @@ function App() {
   return (
     <div className="app">
       <div className="main-content">
-        <header>
-          <h1>React ImageZoomer</h1>
-          <p>An exploration in viewing large images on small screens.</p>
-        </header>
-
         <div className="demo-section">
-          <h2>Interactive Demo</h2>
+          <p>
+            Move your mouse over the image to see a lens that displays a zoomed
+            in version of the image.
+          </p>
           <div className="image-container">
             <ImageZoomer
               zoom={isZooming}
@@ -190,6 +188,23 @@ function App() {
             />
           </div>
         </div>
+
+        <header>
+          <h1>React ImageZoomer</h1>
+          <p>
+            An exploration in viewing large images on small desktop screens.
+          </p>
+          <p>
+            I wanted something that was minimal and allowed me to quickly
+            inspect an image without manually zooming.
+          </p>
+          <p>
+            Source, implementation, and usage, see:{" "}
+            <a href="https://github.com/bigredwill/image-zoomer">
+              github.com/bigredwill/image-zoomer
+            </a>
+          </p>
+        </header>
       </div>
 
       {mousePosition && (
