@@ -30,6 +30,7 @@ export default defineConfig(({ mode }) => {
   // Default: build the demo site as static files
   return {
     plugins: [react()],
+    base: process.env.NODE_ENV === "production" ? "/image-zoomer/" : "/",
     build: {
       outDir: "demo-dist",
     },
