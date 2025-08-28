@@ -5,6 +5,10 @@ import "./App.css";
 
 function App() {
   const [isZooming, setZooming] = useState(true);
+  const [mousePosition, setMousePosition] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
   const [zoomFactor, setZoomFactor] = useState(2.5);
   const [lensSize, setLensSize] = useState(200);
   const [viewportPosition, setViewportPosition] = useState<
@@ -27,8 +31,8 @@ function App() {
       name: "Landscape",
     },
     {
-      src: "https://picsum.photos/600/800?random=2",
-      zoomSrc: "https://picsum.photos/1200/1600?random=2",
+      src: "https://picsum.photos/id/788/600/800",
+      zoomSrc: "https://picsum.photos/id/788/2400/3200",
       alt: "Sample portrait image",
       name: "Portrait",
     },
@@ -45,24 +49,60 @@ function App() {
 
   return (
     <div className="app">
-      <header>
-        <h1>React ImageZoomer</h1>
-        <p>An exploration in viewing large images on small screens.</p>
-      </header>
+      <div className="main-content">
+        <header>
+          <h1>React ImageZoomer</h1>
+          <p>An exploration in viewing large images on small screens.</p>
+        </header>
+
+        <div className="demo-section">
+          <h2>Interactive Demo</h2>
+          <div className="image-container">
+            <ImageZoomer
+              zoom={isZooming}
+              src={selectedImage.src}
+              zoomSrc={useHighResZoom ? selectedImage.zoomSrc : undefined}
+              alt={selectedImage.alt}
+              zoomFactor={zoomFactor}
+              lensSize={lensSize}
+              viewportPosition={viewportPosition}
+              viewportWidth={300}
+              viewportHeight={300}
+              showCrosshair={showCrosshair}
+              onMouseEnter={() => console.log("Mouse entered")}
+              onMouseLeave={() => {
+                console.log("Mouse left");
+                setMousePosition(null);
+              }}
+              onMouseMove={(_, pos) => {
+                console.log("Mouse position:", pos);
+                setMousePosition(pos);
+              }}
+              onImageLoad={() => console.log("Image loaded successfully")}
+              onImageError={() => console.log("Image failed to load")}
+            />
+          </div>
+        </div>
+      </div>
 
       <div className="controls">
         <div className="control-group">
-          <button
-            onClick={() => setZooming(!isZooming)}
-            className={`zoom-toggle ${isZooming ? "active" : ""}`}
-          >
-            Zoom {isZooming ? "On" : "Off"}
-          </button>
+          <h3>Zoom Control</h3>
+          <div className="control-row">
+            <label>Enable Zoom</label>
+            <button
+              onClick={() => setZooming(!isZooming)}
+              className={`zoom-toggle ${isZooming ? "active" : ""}`}
+            >
+              {isZooming ? "ON" : "OFF"}
+            </button>
+          </div>
         </div>
 
         <div className="control-group">
-          <label>
-            Image:
+          <h3>Image Selection</h3>
+          <div className="control-row">
+            <label>Image</label>
             <select
               value={selectedImage.name}
               onChange={(e) => {
@@ -78,12 +118,21 @@ function App() {
                 </option>
               ))}
             </select>
-          </label>
+          </div>
+          <div className="control-row">
+            <label>High-Res Zoom</label>
+            <input
+              type="checkbox"
+              checked={useHighResZoom}
+              onChange={(e) => setUseHighResZoom(e.target.checked)}
+            />
+          </div>
         </div>
 
         <div className="control-group">
-          <label>
-            Zoom Factor: {zoomFactor}x
+          <h3>Zoom Settings</h3>
+          <div className="control-row">
+            <label>Zoom Factor</label>
             <input
               type="range"
               min="1.5"
@@ -92,12 +141,10 @@ function App() {
               value={zoomFactor}
               onChange={(e) => setZoomFactor(parseFloat(e.target.value))}
             />
-          </label>
-        </div>
-
-        <div className="control-group">
-          <label>
-            Lens Size: {lensSize}px
+            <span className="value-display">{zoomFactor}x</span>
+          </div>
+          <div className="control-row">
+            <label>Lens Size</label>
             <input
               type="range"
               min="100"
@@ -106,12 +153,14 @@ function App() {
               value={lensSize}
               onChange={(e) => setLensSize(parseInt(e.target.value))}
             />
-          </label>
+            <span className="value-display">{lensSize}px</span>
+          </div>
         </div>
 
         <div className="control-group">
-          <label>
-            Viewport Position:
+          <h3>Viewport Settings</h3>
+          <div className="control-row">
+            <label>Position</label>
             <select
               value={viewportPosition}
               onChange={(e) =>
@@ -131,54 +180,23 @@ function App() {
               <option value="left">Left</option>
               <option value="top">Top</option>
             </select>
-          </label>
-        </div>
-
-        <div className="control-group">
-          <label>
+          </div>
+          <div className="control-row">
+            <label>Show Crosshair</label>
             <input
               type="checkbox"
               checked={showCrosshair}
               onChange={(e) => setShowCrosshair(e.target.checked)}
             />
-            Show Crosshair
-          </label>
-        </div>
-
-        <div className="control-group">
-          <label>
-            <input
-              type="checkbox"
-              checked={useHighResZoom}
-              onChange={(e) => setUseHighResZoom(e.target.checked)}
-            />
-            High-Res Zoom Images
-          </label>
+          </div>
         </div>
       </div>
 
-      <div className="demo-section">
-        <h2>Interactive Demo</h2>
-        <div className="image-container">
-          <ImageZoomer
-            zoom={isZooming}
-            src={selectedImage.src}
-            zoomSrc={useHighResZoom ? selectedImage.zoomSrc : undefined}
-            alt={selectedImage.alt}
-            zoomFactor={zoomFactor}
-            lensSize={lensSize}
-            viewportPosition={viewportPosition}
-            viewportWidth={300}
-            viewportHeight={300}
-            showCrosshair={showCrosshair}
-            onMouseEnter={() => console.log("Mouse entered")}
-            onMouseLeave={() => console.log("Mouse left")}
-            onMouseMove={(_, pos) => console.log("Mouse position:", pos)}
-            onImageLoad={() => console.log("Image loaded successfully")}
-            onImageError={() => console.log("Image failed to load")}
-          />
+      {mousePosition && (
+        <div className="mouse-position">
+          {mousePosition.x.toFixed(0)}, {mousePosition.y.toFixed(0)}
         </div>
-      </div>
+      )}
     </div>
   );
 }
