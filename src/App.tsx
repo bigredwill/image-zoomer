@@ -19,8 +19,8 @@ function App() {
   // Sample images for testing
   const sampleImages = [
     {
-      src: "/dream-thumb.jpeg",
-      zoomSrc: "/dream.jpeg",
+      src: `${import.meta.env.BASE_URL}dream-thumb.jpeg`,
+      zoomSrc: `${import.meta.env.BASE_URL}dream.jpeg`,
       alt: "Sample landscape image",
       name: "Dream",
     },
