@@ -6,20 +6,32 @@ import dts from "vite-plugin-dts";
 import { peerDependencies } from "./package.json";
 
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [react(), dts({ rollupTypes: true })],
-  build: {
-    target: "esnext",
-    minify: false,
-    lib: {
-      entry: resolve(__dirname, join("lib", "index.ts")),
-      fileName: "index",
-      cssFileName: "style",
-      formats: ["es", "cjs"],
+export default defineConfig(({ mode }) => {
+  if (mode === "library") {
+    // Build the library for npm publishing
+    return {
+      plugins: [react(), dts({ rollupTypes: true })],
+      build: {
+        target: "esnext",
+        minify: false,
+        lib: {
+          entry: resolve(__dirname, join("lib", "index.ts")),
+          fileName: "index",
+          cssFileName: "style",
+          formats: ["es", "cjs"],
+        },
+        rollupOptions: {
+          external: ["react/jsx-runtime", ...Object.keys(peerDependencies)],
+        },
+      },
+    };
+  }
+
+  // Default: build the demo site as static files
+  return {
+    plugins: [react()],
+    build: {
+      outDir: "demo-dist",
     },
-    rollupOptions: {
-      // Exclude peer dependencies from the bundle to reduce bundle size
-      external: ["react/jsx-runtime", ...Object.keys(peerDependencies)],
-    },
-  },
+  };
 });
