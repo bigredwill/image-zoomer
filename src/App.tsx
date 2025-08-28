@@ -4,13 +4,12 @@ import "../lib/styles/image-zoomer.css";
 import "./App.css";
 
 function App() {
-  const [isZooming, setZooming] = useState(false);
+  const [isZooming, setZooming] = useState(true);
   const [zoomFactor, setZoomFactor] = useState(2.5);
   const [lensSize, setLensSize] = useState(200);
   const [viewportPosition, setViewportPosition] = useState<
-    "right" | "bottom" | "left" | "top"
-  >("right");
-  const [overlayMode, setOverlayMode] = useState(false);
+    "overlay" | "right" | "bottom" | "left" | "top"
+  >("overlay");
   const [showCrosshair, setShowCrosshair] = useState(true);
 
   // Sample images for testing
@@ -19,11 +18,11 @@ function App() {
       src: "/dream-thumb.jpeg",
       zoomSrc: "/dream.jpeg",
       alt: "Sample landscape image",
-      name: "Landscape",
+      name: "Dream",
     },
     {
-      src: "https://picsum.photos/800/600?random=1",
-      zoomSrc: "https://picsum.photos/3200/2400?random=1",
+      src: "https://picsum.photos/id/1026/800/600",
+      zoomSrc: "https://picsum.photos/id/1026/3200/2400",
       alt: "Sample landscape image",
       name: "Landscape",
     },
@@ -115,25 +114,23 @@ function App() {
             Viewport Position:
             <select
               value={viewportPosition}
-              onChange={(e) => setViewportPosition(e.target.value as any)}
-              disabled={overlayMode}
+              onChange={(e) =>
+                setViewportPosition(
+                  e.target.value as
+                    | "overlay"
+                    | "right"
+                    | "bottom"
+                    | "left"
+                    | "top",
+                )
+              }
             >
+              <option value="overlay">Overlay</option>
               <option value="right">Right</option>
               <option value="bottom">Bottom</option>
               <option value="left">Left</option>
               <option value="top">Top</option>
             </select>
-          </label>
-        </div>
-
-        <div className="control-group">
-          <label>
-            <input
-              type="checkbox"
-              checked={overlayMode}
-              onChange={(e) => setOverlayMode(e.target.checked)}
-            />
-            Overlay Mode (follows mouse)
           </label>
         </div>
 
@@ -173,7 +170,6 @@ function App() {
             viewportPosition={viewportPosition}
             viewportWidth={300}
             viewportHeight={300}
-            overlayMode={overlayMode}
             showCrosshair={showCrosshair}
             onMouseEnter={() => console.log("Mouse entered")}
             onMouseLeave={() => console.log("Mouse left")}

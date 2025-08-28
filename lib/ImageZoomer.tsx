@@ -1,4 +1,10 @@
-import React, { useCallback, useRef, useState, useEffect } from "react";
+import React, {
+  useCallback,
+  useRef,
+  useState,
+  useEffect,
+  useMemo,
+} from "react";
 
 export interface ImageZoomerProps {
   /** Whether zoom is currently active */
@@ -20,11 +26,9 @@ export interface ImageZoomerProps {
   /** Height of the zoom viewport in pixels (default: 300) */
   viewportHeight?: number;
   /** Position of the zoom viewport relative to the image */
-  viewportPosition?: "right" | "bottom" | "left" | "top";
+  viewportPosition?: "overlay" | "right" | "bottom" | "left" | "top";
   /** Offset of the viewport from the image edge in pixels (default: 20) */
   viewportOffset?: number;
-  /** Whether to show the viewport as an overlay following the mouse cursor */
-  overlayMode?: boolean;
   /** Whether to show crosshair at zoom center point (default: true) */
   showCrosshair?: boolean;
   /** Called when mouse enters the image */
@@ -85,9 +89,8 @@ export const ImageZoomer: React.FC<ImageZoomerProps> = ({
   lensSize = 200,
   viewportWidth = 300,
   viewportHeight = 300,
-  viewportPosition = "right",
+  viewportPosition = "overlay",
   viewportOffset = 20,
-  overlayMode = false,
   showCrosshair = true,
   onMouseEnter,
   onMouseLeave,
@@ -95,6 +98,10 @@ export const ImageZoomer: React.FC<ImageZoomerProps> = ({
   onImageLoad,
   onImageError,
 }) => {
+  const overlayMode = useMemo(() => {
+    return viewportPosition === "overlay";
+  }, [viewportPosition]);
+
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
