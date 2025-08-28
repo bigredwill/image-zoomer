@@ -1,25 +1,15 @@
 # React Image Zoomer
 
-A lightweight, controlled React component for image zooming with customizable styling via CSS custom properties.
+A minimal, controlled React component for image zooming. Simply hover the image to see an overlayed zoom. See [https://bigredwill.github.io/image-zoomer](https://bigredwill.github.io/image-zoomer) for a demo.
 
-[![npm version](https://badge.fury.io/js/react-image-zoomer.svg)](https://www.npmjs.com/package/react-image-zoomer)
+<!--[![npm version](https://badge.fury.io/js/react-image-zoomer.svg)](https://www.npmjs.com/package/react-image-zoomer)-->
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Features
-
-- 🎛️ **Controlled Component** - Fully stateless, you control the zoom state
-- 🎨 **CSS Custom Properties** - Easy theming via CSS variables
-- 📱 **Responsive** - Works on desktop and mobile devices
-- ♿ **Accessible** - Built with accessibility in mind
-- 🪶 **Lightweight** - Zero runtime dependencies
-- 📦 **TypeScript** - Full TypeScript support
-- 🔧 **Configurable** - Extensive customization options
-- 🎯 **Overlay Mode** - Viewport follows mouse cursor for intuitive zooming
-- 📐 **Square Lens** - Clean, modern square lens design
-- 🎯 **Crosshair** - Precise targeting with customizable crosshair
 
 ## Installation
+
+_This package has not yet been published to npm_
 
 ```bash
 npm install react-image-zoomer
@@ -48,7 +38,7 @@ function App() {
       <button onClick={() => setIsZooming(!isZooming)}>
         Toggle Zoom
       </button>
-      
+
       <ImageZoomer
         zoom={isZooming}
         src="https://example.com/your-image.jpg"
@@ -67,15 +57,15 @@ function App() {
 |------|------|---------|-------------|
 | `zoom` | `boolean` | - | **Required.** Whether zoom is currently active |
 | `src` | `string` | - | **Required.** Image source URL |
+| `zoomSrc` | `string` | `undefined` | High-resolution image source URL for zoom viewport |
 | `alt` | `string` | `undefined` | Alt text for accessibility |
 | `className` | `string` | `""` | Additional CSS class name |
 | `zoomFactor` | `number` | `2.5` | Zoom magnification factor |
 | `lensSize` | `number` | `200` | Size of the zoom lens in pixels |
 | `viewportWidth` | `number` | `300` | Width of the zoom viewport |
 | `viewportHeight` | `number` | `300` | Height of the zoom viewport |
-| `viewportPosition` | `"right" \| "bottom" \| "left" \| "top"` | `"right"` | Position of the zoom viewport |
+| `viewportPosition` | `"overlay" \| "right" \| "bottom" \| "left" \| "top"` | `"overlay"` | Position of the zoom viewport |
 | `viewportOffset` | `number` | `20` | Offset from the image edge in pixels |
-| `overlayMode` | `boolean` | `false` | Show viewport as overlay following mouse cursor |
 | `showCrosshair` | `boolean` | `true` | Show crosshair at zoom center point |
 
 ### Event Callbacks
@@ -113,7 +103,7 @@ function App() {
   zoom={isZooming}
   src="/path/to/image.jpg"
   alt="Product image"
-  overlayMode={true}
+  viewportPosition="overlay"
   viewportWidth={300}
   viewportHeight={300}
   lensSize={120}
@@ -247,15 +237,15 @@ This package includes TypeScript definitions. The main interfaces are:
 interface ImageZoomerProps {
   zoom: boolean;
   src: string;
+  zoomSrc?: string;
   alt?: string;
   className?: string;
   zoomFactor?: number;
   lensSize?: number;
   viewportWidth?: number;
   viewportHeight?: number;
-  viewportPosition?: "right" | "bottom" | "left" | "top";
+  viewportPosition?: "overlay" | "right" | "bottom" | "left" | "top";
   viewportOffset?: number;
-  overlayMode?: boolean;
   showCrosshair?: boolean;
   onMouseEnter?: (event: React.MouseEvent<HTMLDivElement>) => void;
   onMouseLeave?: (event: React.MouseEvent<HTMLDivElement>) => void;
@@ -268,27 +258,12 @@ interface ImageZoomerProps {
 }
 ```
 
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
 ## License
 
-MIT © [Your Name](https://github.com/yourusername)
+MIT ©
 
 ## Changelog
 
-### v1.0.0
+### v0.0.1
 - Initial release
-- Controlled zoom component
-- CSS custom properties theming
-- TypeScript support
-- Responsive design
-- Accessibility features
-- Overlay mode for intuitive mouse-following viewport
-- Square lens design for modern aesthetics
-- Crosshair for precise zoom targeting
+- proof-of-concept zooming
