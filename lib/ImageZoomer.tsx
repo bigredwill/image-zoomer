@@ -182,41 +182,61 @@ export const ImageZoomer: React.FC<ImageZoomerProps> = ({
     img.src = zoomSrc;
   }, [zoomSrc]);
 
+  // Calculate effective lens size - clamp to image dimensions in non-overlay mode
+  const effectiveLensSize = React.useMemo(() => {
+    if (overlayMode) {
+      return lensSize;
+    }
+    // In non-overlay mode, clamp lens size to fit within image
+    return Math.min(
+      lensSize,
+      Math.min(imageDimensions.width, imageDimensions.height),
+    );
+  }, [lensSize, imageDimensions, overlayMode]);
+
   // Calculate lens position - clamp lens to stay within image bounds while allowing mouse to reach edges
   const lensPosition = React.useMemo(() => {
-    const halfLens = lensSize / 2;
+    const halfLens = effectiveLensSize / 2;
     return {
       x: clamp(mousePosition.x, halfLens, imageDimensions.width - halfLens),
       y: clamp(mousePosition.y, halfLens, imageDimensions.height - halfLens),
     };
-  }, [mousePosition, lensSize, imageDimensions]);
+  }, [mousePosition, effectiveLensSize, imageDimensions]);
 
   // Calculate viewport position based on viewportPosition prop or overlay mode
   const viewportStyles = React.useMemo(() => {
     if (!isImageLoaded) return {};
 
     const styles: React.CSSProperties = {
-      width: viewportWidth,
-      height: viewportHeight,
+      width: overlayMode ? lensSize : viewportWidth,
+      height: overlayMode ? lensSize : viewportHeight,
     };
 
     if (overlayMode) {
-      // Position viewport centered on mouse cursor, but keep within container bounds
-      const halfViewportWidth = viewportWidth / 2;
-      const halfViewportHeight = viewportHeight / 2;
+      // If lens is bigger than image, center it on the image
+      if (
+        lensSize >= imageDimensions.width ||
+        lensSize >= imageDimensions.height
+      ) {
+        styles.left = Math.max(0, (imageDimensions.width - lensSize) / 2);
+        styles.top = Math.max(0, (imageDimensions.height - lensSize) / 2);
+      } else {
+        // Position viewport centered on mouse cursor, but keep within container bounds
+        const halfLens = lensSize / 2;
 
-      // Calculate position relative to container, keeping viewport within bounds
-      const left = Math.min(
-        Math.max(mousePosition.x - halfViewportWidth, 0),
-        imageDimensions.width - viewportWidth,
-      );
-      const top = Math.min(
-        Math.max(mousePosition.y - halfViewportHeight, 0),
-        imageDimensions.height - viewportHeight,
-      );
+        // Calculate position relative to container, keeping viewport within bounds
+        const left = Math.min(
+          Math.max(mousePosition.x - halfLens, 0),
+          imageDimensions.width - lensSize,
+        );
+        const top = Math.min(
+          Math.max(mousePosition.y - halfLens, 0),
+          imageDimensions.height - lensSize,
+        );
 
-      styles.left = left;
-      styles.top = top;
+        styles.left = left;
+        styles.top = top;
+      }
     } else {
       switch (viewportPosition) {
         case "right":
@@ -248,6 +268,7 @@ export const ImageZoomer: React.FC<ImageZoomerProps> = ({
     overlayMode,
     mousePosition,
     isImageLoaded,
+    lensSize,
   ]);
 
   // Calculate zoomed image position and scale
@@ -262,8 +283,10 @@ export const ImageZoomer: React.FC<ImageZoomerProps> = ({
     const scale = zoomFactor;
 
     // Position the zoomed image so that the mouse position appears centered in viewport
-    const translateX = -(clampedMouseX * scale) + viewportWidth / 2;
-    const translateY = -(clampedMouseY * scale) + viewportHeight / 2;
+    const currentViewportWidth = overlayMode ? lensSize : viewportWidth;
+    const currentViewportHeight = overlayMode ? lensSize : viewportHeight;
+    const translateX = -(clampedMouseX * scale) + currentViewportWidth / 2;
+    const translateY = -(clampedMouseY * scale) + currentViewportHeight / 2;
 
     return {
       width: imageDimensions.width * scale,
@@ -277,6 +300,8 @@ export const ImageZoomer: React.FC<ImageZoomerProps> = ({
     viewportWidth,
     viewportHeight,
     isImageLoaded,
+    overlayMode,
+    lensSize,
   ]);
 
   // Set CSS custom properties
@@ -287,9 +312,14 @@ export const ImageZoomer: React.FC<ImageZoomerProps> = ({
         "--image-zoomer-zoom-factor",
         zoomFactor.toString(),
       );
-      container.style.setProperty("--image-zoomer-lens-size", `${lensSize}px`);
+      container.style.setProperty(
+        "--image-zoomer-lens-size",
+        `${effectiveLensSize}px`,
+      );
+      console.log(containerRef);
     }
-  }, [zoomFactor, lensSize]);
+    console.log("no container ref");
+  }, [zoomFactor, effectiveLensSize]);
 
   // Determine which image source to use for zoom
   const zoomImageSrc = zoomSrc && isZoomImageLoaded ? zoomSrc : src;
@@ -341,6 +371,8 @@ export const ImageZoomer: React.FC<ImageZoomerProps> = ({
               style={{
                 left: lensPosition.x,
                 top: lensPosition.y,
+                width: effectiveLensSize,
+                height: effectiveLensSize,
               }}
             />
           )}

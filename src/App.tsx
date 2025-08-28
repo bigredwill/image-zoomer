@@ -9,8 +9,8 @@ function App() {
     x: number;
     y: number;
   } | null>(null);
-  const [zoomFactor, setZoomFactor] = useState(2.5);
-  const [lensSize, setLensSize] = useState(200);
+  const [zoomFactor, setZoomFactor] = useState(4);
+  const [lensSize, setLensSize] = useState(300);
   const [viewportPosition, setViewportPosition] = useState<
     "overlay" | "right" | "bottom" | "left" | "top"
   >("overlay");
@@ -23,24 +23,6 @@ function App() {
       zoomSrc: `${import.meta.env.BASE_URL}dream.jpeg`,
       alt: "Sample landscape image",
       name: "Dream",
-    },
-    {
-      src: "https://picsum.photos/id/1026/800/600",
-      zoomSrc: "https://picsum.photos/id/1026/3200/2400",
-      alt: "Sample landscape image",
-      name: "Landscape",
-    },
-    {
-      src: "https://picsum.photos/id/788/600/800",
-      zoomSrc: "https://picsum.photos/id/788/2400/3200",
-      alt: "Sample portrait image",
-      name: "Portrait",
-    },
-    {
-      src: "https://picsum.photos/500/500?random=3",
-      zoomSrc: "https://picsum.photos/1000/1000?random=3",
-      alt: "Sample square image",
-      name: "Square",
     },
   ];
 
@@ -146,7 +128,7 @@ function App() {
             <input
               type="range"
               min="100"
-              max="300"
+              max="800"
               step="10"
               value={lensSize}
               onChange={(e) => setLensSize(parseInt(e.target.value))}
