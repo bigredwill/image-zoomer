@@ -3,6 +3,10 @@
   box-sizing: border-box;
 }
 
+#root {
+  --image-zoomer-viewport-bg: #1f1f1f;
+}
+
 body {
   margin: 0;
   font-family:
@@ -11,8 +15,33 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
-  color: #333;
-  background: #f8f9fa;
+  color: #ffffff;
+  background:
+                  /* Vertical lines */
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 8px,
+      rgba(255, 255, 255, 0.1) 8px,
+      rgba(255, 255, 255, 0.1) 9px
+    ),
+    /* Horizontal lines */
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 12px,
+        rgba(0, 0, 0, 0.15) 12px,
+        rgba(0, 0, 0, 0.15) 13px
+      ),
+    /* Diagonal lines subtle */
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 20px,
+        rgba(255, 255, 255, 0.03) 20px,
+        rgba(255, 255, 255, 0.03) 21px
+      ),
+    /* Base dark background */ #1f1f1f;
 }
 
 #root {
@@ -38,22 +67,24 @@ body {
 /* Header */
 header {
   text-align: start;
-  padding: 2rem 0;
-  color: black;
-  background: white;
-  border-bottom: 1px solid #e9ecef;
+  padding: 1rem 0.2rem;
+  color: #ffffff;
+  background: rgba(40, 40, 40, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 header h1 {
   font-size: 1.5rem;
   font-weight: 500;
   margin: 0;
+  color: #ffffff;
 }
 
 header p {
   font-size: 1.1rem;
   margin: 0.5rem 0 0;
   opacity: 0.7;
+  color: #cccccc;
 }
 
 /* Three.js Style Control Panel */
@@ -63,13 +94,13 @@ header p {
   right: 0;
   width: 280px;
   height: 100vh;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(25, 25, 25, 0.95);
   backdrop-filter: blur(8px);
-  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
   padding: 20px;
   overflow-y: auto;
   font-size: 13px;
-  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
   z-index: 1000;
 }
 
@@ -77,10 +108,10 @@ header p {
   margin: 0 0 15px 0;
   font-size: 14px;
   font-weight: 600;
-  color: #333;
+  color: #ffffff;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   padding-bottom: 8px;
 }
 
@@ -98,7 +129,7 @@ header p {
 
 .control-row label {
   font-weight: 500;
-  color: #555;
+  color: #cccccc;
   font-size: 12px;
   margin: 0;
   flex-shrink: 0;
@@ -138,7 +169,7 @@ input[type="range"] {
   width: 120px;
   height: 3px;
   border-radius: 2px;
-  background: #ddd;
+  background: rgba(255, 255, 255, 0.2);
   outline: none;
   cursor: pointer;
   margin: 0;
@@ -171,9 +202,10 @@ input[type="range"]::-moz-range-thumb {
 /* Select Dropdowns */
 select {
   padding: 4px 8px;
-  border: 1px solid #ccc;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 3px;
-  background: white;
+  background: rgba(40, 40, 40, 0.9);
+  color: #ffffff;
   font-size: 11px;
   cursor: pointer;
   width: 120px;
@@ -190,9 +222,9 @@ input[type="checkbox"] {
   appearance: none;
   width: 14px;
   height: 14px;
-  border: 1px solid #ccc;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 2px;
-  background: white;
+  background: rgba(40, 40, 40, 0.9);
   cursor: pointer;
   position: relative;
   margin: 0;
@@ -218,7 +250,7 @@ input[type="checkbox"]:checked::after {
 /* Value Display */
 .value-display {
   font-size: 11px;
-  color: #666;
+  color: #cccccc;
   font-family: "Courier New", monospace;
   min-width: 40px;
   text-align: right;
@@ -235,7 +267,7 @@ input[type="checkbox"]:checked::after {
 .demo-section h2 {
   margin: 0 0 1.5rem;
   font-size: 1.5rem;
-  color: #333;
+  color: #ffffff;
   font-weight: 600;
 }
 
@@ -244,16 +276,16 @@ input[type="checkbox"]:checked::after {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: white;
+  background: rgba(40, 40, 40, 0.6);
   border-radius: 8px;
-  border: 1px solid #e9ecef;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   min-height: 500px;
 }
 
 /* Section Dividers */
 .controls hr {
   border: none;
-  border-top: 1px solid #eee;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
   margin: 20px 0;
 }
 
@@ -283,7 +315,7 @@ input[type="checkbox"]:checked::after {
     width: 100%;
     height: 200px;
     border-left: none;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
@@ -372,10 +404,10 @@ input[type="checkbox"]:checked::after {
 }
 
 .controls::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 3px;
 }
 
 .controls::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.3);
 }

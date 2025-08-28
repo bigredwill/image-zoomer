@@ -218,7 +218,7 @@ export const ImageZoomer: React.FC<ImageZoomerProps> = ({
         lensSize >= imageDimensions.width ||
         lensSize >= imageDimensions.height
       ) {
-        styles.left = Math.max(0, (imageDimensions.width - lensSize) / 2);
+        styles.left = Math.min(0, (imageDimensions.width - lensSize) / 2);
         styles.top = Math.max(0, (imageDimensions.height - lensSize) / 2);
       } else {
         // Position viewport centered on mouse cursor, but keep within container bounds
