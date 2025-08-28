@@ -5,6 +5,8 @@ export interface ImageZoomerProps {
   zoom: boolean;
   /** Image source URL */
   src: string;
+  /** High-resolution image source URL for zoom viewport (optional) */
+  zoomSrc?: string;
   /** Alt text for accessibility */
   alt?: string;
   /** Additional CSS class name */
@@ -76,6 +78,7 @@ const clamp = (value: number, min: number, max: number): number => {
 export const ImageZoomer: React.FC<ImageZoomerProps> = ({
   zoom,
   src,
+  zoomSrc,
   alt,
   className = "",
   zoomFactor = 2.5,
@@ -102,6 +105,7 @@ export const ImageZoomer: React.FC<ImageZoomerProps> = ({
   const [mousePosition, setMousePosition] = useState<Position>({ x: 0, y: 0 });
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
+  const [isZoomImageLoaded, setIsZoomImageLoaded] = useState(false);
 
   const handleImageLoad = useCallback(
     (event: React.SyntheticEvent<HTMLImageElement>) => {
@@ -149,6 +153,27 @@ export const ImageZoomer: React.FC<ImageZoomerProps> = ({
     },
     [onMouseLeave],
   );
+
+  // Preload high-res zoom image
+  useEffect(() => {
+    if (!zoomSrc) {
+      setIsZoomImageLoaded(false);
+      return;
+    }
+
+    setIsZoomImageLoaded(false);
+    const img = new Image();
+
+    img.onload = () => {
+      setIsZoomImageLoaded(true);
+    };
+
+    img.onerror = () => {
+      setIsZoomImageLoaded(false);
+    };
+
+    img.src = zoomSrc;
+  }, [zoomSrc]);
 
   // Calculate lens position - clamp lens to stay within image bounds while allowing mouse to reach edges
   const lensPosition = React.useMemo(() => {
@@ -230,11 +255,6 @@ export const ImageZoomer: React.FC<ImageZoomerProps> = ({
     const clampedMouseX = clamp(mousePosition.x, 0, imageDimensions.width);
     const clampedMouseY = clamp(mousePosition.y, 0, imageDimensions.height);
 
-    // Calculate the source area that the lens covers based on clamped lens position
-    const halfLens = lensSize / 2;
-    const sourceX = lensPosition.x - halfLens;
-    const sourceY = lensPosition.y - halfLens;
-
     // Scale factor for the zoomed image
     const scale = zoomFactor;
 
@@ -249,8 +269,6 @@ export const ImageZoomer: React.FC<ImageZoomerProps> = ({
     };
   }, [
     mousePosition,
-    lensPosition,
-    lensSize,
     zoomFactor,
     imageDimensions,
     viewportWidth,
@@ -269,6 +287,9 @@ export const ImageZoomer: React.FC<ImageZoomerProps> = ({
       container.style.setProperty("--image-zoomer-lens-size", `${lensSize}px`);
     }
   }, [zoomFactor, lensSize]);
+
+  // Determine which image source to use for zoom
+  const zoomImageSrc = zoomSrc && isZoomImageLoaded ? zoomSrc : src;
 
   const containerClasses = [
     "image-zoomer",
@@ -325,7 +346,7 @@ export const ImageZoomer: React.FC<ImageZoomerProps> = ({
           <div className="image-zoomer__viewport" style={viewportStyles}>
             <img
               className="image-zoomer__zoomed-image"
-              src={src}
+              src={zoomImageSrc}
               alt=""
               draggable={false}
               style={zoomedImageStyles}

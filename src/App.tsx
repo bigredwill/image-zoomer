@@ -16,17 +16,26 @@ function App() {
   // Sample images for testing
   const sampleImages = [
     {
+      src: "/dream-thumb.jpeg",
+      zoomSrc: "/dream.jpeg",
+      alt: "Sample landscape image",
+      name: "Landscape",
+    },
+    {
       src: "https://picsum.photos/800/600?random=1",
+      zoomSrc: "https://picsum.photos/3200/2400?random=1",
       alt: "Sample landscape image",
       name: "Landscape",
     },
     {
       src: "https://picsum.photos/600/800?random=2",
+      zoomSrc: "https://picsum.photos/1200/1600?random=2",
       alt: "Sample portrait image",
       name: "Portrait",
     },
     {
       src: "https://picsum.photos/500/500?random=3",
+      zoomSrc: "https://picsum.photos/1000/1000?random=3",
       alt: "Sample square image",
       name: "Square",
     },
@@ -137,6 +146,17 @@ function App() {
             Show Crosshair
           </label>
         </div>
+
+        <div className="control-group">
+          <label>
+            <input
+              type="checkbox"
+              checked={useHighResZoom}
+              onChange={(e) => setUseHighResZoom(e.target.checked)}
+            />
+            High-Res Zoom Images
+          </label>
+        </div>
       </div>
 
       <div className="demo-section">
@@ -145,6 +165,7 @@ function App() {
           <ImageZoomer
             zoom={isZooming}
             src={selectedImage.src}
+            zoomSrc={useHighResZoom ? selectedImage.zoomSrc : undefined}
             alt={selectedImage.alt}
             zoomFactor={zoomFactor}
             lensSize={lensSize}
@@ -160,65 +181,6 @@ function App() {
             onImageError={() => console.log("Image failed to load")}
           />
         </div>
-      </div>
-
-      <div className="demo-section">
-        <h2>Multiple Examples</h2>
-        <div className="examples-grid">
-          <div className="example">
-            <h3>Small Lens</h3>
-            <ImageZoomer
-              zoom={true}
-              src="https://picsum.photos/400/300?random=4"
-              alt="Small lens example"
-              lensSize={120}
-              zoomFactor={3}
-              viewportWidth={200}
-              viewportHeight={200}
-            />
-          </div>
-
-          <div className="example">
-            <h3>High Zoom</h3>
-            <ImageZoomer
-              zoom={true}
-              src="https://picsum.photos/400/300?random=5"
-              alt="High zoom example"
-              zoomFactor={4}
-              viewportPosition="right"
-            />
-          </div>
-
-          <div className="example">
-            <h3>Overlay Mode</h3>
-            <ImageZoomer
-              zoom={true}
-              src="https://picsum.photos/400/300?random=6"
-              alt="Overlay mode example"
-              overlayMode={true}
-              viewportWidth={200}
-              viewportHeight={200}
-              lensSize={120}
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="info-section">
-        <h2>Features</h2>
-        <ul>
-          <li>✅ Controlled/stateless component</li>
-          <li>✅ Configurable zoom factor and lens size</li>
-          <li>✅ Multiple viewport positions (right, left, top, bottom)</li>
-          <li>✅ Overlay mode (viewport follows mouse cursor)</li>
-          <li>✅ Square lens design</li>
-          <li>✅ Crosshair for precise zoom targeting</li>
-          <li>✅ CSS custom properties for theming</li>
-          <li>✅ Responsive design</li>
-          <li>✅ Accessibility support</li>
-          <li>✅ TypeScript support</li>
-          <li>✅ Zero runtime dependencies</li>
-        </ul>
       </div>
     </div>
   );
