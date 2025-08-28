@@ -42,12 +42,13 @@ function App() {
   ];
 
   const [selectedImage, setSelectedImage] = useState(sampleImages[0]);
+  const [useHighResZoom, setUseHighResZoom] = useState(true);
 
   return (
     <div className="app">
       <header>
-        <h1>ImageZoomer Demo</h1>
-        <p>A controlled, stateless image zoom component</p>
+        <h1>React ImageZoomer</h1>
+        <p>An exploration in viewing large images on small screens.</p>
       </header>
 
       <div className="controls">

@@ -10,9 +10,12 @@ body {
     "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
   color: #333;
+}
+
+#root {
+  width: 100%;
 }
 
 .app {
@@ -25,14 +28,13 @@ body {
 header {
   text-align: center;
   margin-bottom: 3rem;
-  color: white;
+  color: black;
 }
 
 header h1 {
   font-size: 3rem;
   font-weight: 700;
   margin: 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 header p {
@@ -44,10 +46,10 @@ header p {
 /* Controls */
 .controls {
   background: white;
-  border-radius: 12px;
+  /*border-radius: 12px;*/
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1.5rem;
