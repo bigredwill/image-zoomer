@@ -179,12 +179,8 @@ export const ImageZoomer: React.FC<ImageZoomerProps> = ({
   const lensPosition = React.useMemo(() => {
     const halfLens = lensSize / 2;
     return {
-      x: clamp(mousePosition.x - halfLens, 0, imageDimensions.width - lensSize),
-      y: clamp(
-        mousePosition.y - halfLens,
-        0,
-        imageDimensions.height - lensSize,
-      ),
+      x: clamp(mousePosition.x, halfLens, imageDimensions.width - halfLens),
+      y: clamp(mousePosition.y, halfLens, imageDimensions.height - halfLens),
     };
   }, [mousePosition, lensSize, imageDimensions]);
 
